@@ -13,16 +13,17 @@ function getRandomNum(min, max) {
 function getDefaultParticleParam() {
     return {
         speed: [5, 10], 
-        size: [10, 20],
+        size: [5, 20],
         shapes: ["circle"],
         effectWidth: 60,
-        destroyTime: [10, 25],
+        destroyTime: [25, 25],
         fadeOut: 0,
-        shrink: 1,
+        shrink: 0.5,
         angle: 90,
-        colors: ["red", "orange", "gray"],
-        particlesNum: 4,
-        continuous: true
+        colors: ["yellow", "magenta", "cyan"],
+        particleAmount: 5,
+        continuous: true,
+        effectVel: {x: 0, y: 0}
     }
 }
 
@@ -39,8 +40,9 @@ function getDefaultParticleParam() {
 //         shrink: 6,
 //         angle: 90,
 //         colors: ["yellow", "darkorange", "orange", "gray", "darkgray"],
-//         particlesNum: 100,
+//         particleAmount: 100,
 //         continuous: false
+//         effectVel: {x: 0, y: 0}
 //     }
 // }
 
@@ -59,11 +61,20 @@ function fillTriangle(x, y, size) {
     g.fill()
 }
 
+function drawLine(x, y, size, angle) {
+    g.lineWidth = 5
+    g.lineCap = "round"
+    g.beginPath()
+    g.moveTo(x, y)
+    let xDist = Math.cos(angle)*size*1.5
+    let yDist = Math.sin(angle)*size*1.5
+    g.lineTo(x+xDist, y+yDist)
+    g.stroke()
+}
+
 class Particle {
 
     constructor(x, y, params) {
-
-        //switch from this stupid way of calculating trajectory to the chad angles with sin and cos
 
         this.speed = getRandomNum(params.speed[0], params.speed[1])
         
@@ -83,9 +94,9 @@ class Particle {
         let maxAngle = params.angle+(params.effectWidth/2)
         minAngle = convertToRadians(minAngle)
         maxAngle = convertToRadians(maxAngle)
-        let angle = getRandomNum(minAngle, maxAngle)
-        let velX = Math.cos(angle)*this.speed
-        let velY = Math.sin(angle)*this.speed
+        this.angle = getRandomNum(minAngle, maxAngle)
+        let velX = Math.cos(this.angle)*this.speed
+        let velY = Math.sin(this.angle)*this.speed
         this.origin = {
             x: x,
             y: y
@@ -121,6 +132,7 @@ class Particle {
         }
 
         g.fillStyle = this.color;
+        g.strokeStyle = this.color;
 
         if(this.shape == "circle") {
             g.beginPath();
@@ -130,6 +142,8 @@ class Particle {
             g.fillRect(this.pos.x, this.pos.y, this.size*1.5, this.size*1.5)
         } else if(this.shape == "triangle") {
             fillTriangle(this.pos.x, this.pos.y, this.size)
+        } else if(this.shape == "line") {
+            drawLine(this.pos.x, this.pos.y, this.size, this.angle)
         }
 
         g.globalAlpha = 1.0
@@ -154,15 +168,20 @@ class ParticleEffect {
             this.particleParams[element] = particleParams[element]
         }
 
+        this.vel = {
+            x: this.particleParams.effectVel.x,
+            y: this.particleParams.effectVel.y
+        }
+
         this.continuous = this.particleParams.continuous
-        this.particlesNum = this.particleParams.particlesNum
+        this.particleAmount = this.particleParams.particleAmount
 
         this.particles = []
 
         this.frame = 0;
 
         if(this.continuous == false) {
-            for(let i = 0; i < this.particlesNum; i++) {
+            for(let i = 0; i < this.particleAmount; i++) {
                 this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
             }
         }
@@ -170,12 +189,12 @@ class ParticleEffect {
 
     update() {
         if(this.continuous) {
-            for(let i = 0; i < this.particlesNum; i++) {
+            for(let i = 0; i < this.particleAmount; i++) {
                 this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
             }
         }
 
-        this.pos.x+=0
+        this.pos.x+=this.vel.x; this.pos.y+=this.vel.y
            
 
         for(let i = 0; i < this.particles.length; i++) {
@@ -201,7 +220,15 @@ class ParticleEffect {
 
 }
 
-let particleEffect = new ParticleEffect(canvas.width/2, 650, {}, {})
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {})
+
+function generateNewEffect() {
+    particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
+        effectWidth: document.getElementById("effectWidthSlider").value,
+        particleAmount: document.getElementById("particleAmountSlider").value,
+        continuous: document.getElementById("continuousCheckbox").checked
+    })
+}
 
 
 function animate() {
