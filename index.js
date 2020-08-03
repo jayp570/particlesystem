@@ -5,28 +5,52 @@ canvas.height = 720;
 
 let g = canvas.getContext("2d");
 
+
 function getRandomNum(min, max) {
     return Math.random() * (max-min) + min
 }
 
 function getDefaultParticleParam() {
     return {
-        speed: 5, 
-        size: 50,
-        effectRadius: 180,
-        destroyTime: 50,
-        fadeOut: 0.01,
-        shrink: 50,
+        speed: [5, 10], 
+        size: [5, 10],
+        effectRadius: 60,
+        destroyTime: [10, 25],
+        fadeOut: 0,
+        shrink: 1,
         angle: 90,
-        colors: ["red", "orange", "yellow", "green", "blue", "purple"]
+        colors: ["yellow", "red", "orange", "gray", "darkgray"]
     }
 }
 
 function getDefaultParticleEffectParam() {
     return {
-        particlesNum: 100,
+        particlesNum: 1,
+        continuous: true
     }
 }
+
+/*
+function getDefaultParticleParam() {
+    return {
+        speed: [5, 20], 
+        size: [5, 50],
+        effectRadius: 360,
+        destroyTime: [0, 0],
+        fadeOut: 0,
+        shrink: 4,
+        angle: 90,
+        colors: ["yellow", "red", "orange", "gray", "darkgray"]
+    }
+}
+
+function getDefaultParticleEffectParam() {
+    return {
+        particlesNum: 1000,
+        continuous: false
+    }
+}
+*/
 
 function convertToRadians(num) {
     return num*(Math.PI/180)
@@ -38,11 +62,11 @@ class Particle {
 
         //switch from this stupid way of calculating trajectory to the chad angles with sin and cos
 
-        this.speed = params.speed
+        this.speed = getRandomNum(params.speed[0], params.speed[1])
         
-        this.size = params.size
+        this.size = getRandomNum(params.size[0], params.size[1])
 
-        this.destroyTime = params.destroyTime
+        this.destroyTime = getRandomNum(params.destroyTime[0], params.destroyTime[1])
         this.fadeOut = params.fadeOut
         this.shrink = params.shrink
 
@@ -122,20 +146,38 @@ class ParticleEffect {
             this.particleParams[element] = particleParams[element]
         }
 
+        this.continuous = this.particleEffectParams.continuous
+        this.particlesNum = this.particleEffectParams.particlesNum
+
         this.particles = []
+
+        this.frame = 0;
+
+        if(this.continuous == false) {
+            for(let i = 0; i < this.particlesNum; i++) {
+                this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
+            }
+        }
     }
 
     update() {
-        let chance = Math.ceil(Math.random()*(100/this.particleEffectParams.particlesNum))
-        if(chance == 1) {
-            this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
+        if(this.continuous) {
+            for(let i = 0; i < this.particlesNum; i++) {
+                this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
+            }
         }
+           
 
         for(let i = 0; i < this.particles.length; i++) {
             this.particles[i].update()
-            if(this.particles[i].opacity <= 0 || this.particles[0].size <= 0 || 
-            (this.particles[i].fadeOut == 0 && this.particles[i].shrink == 0 && this.particles[i].frame > this.particles[i].destroyTime)) {
+            if(this.particles[i].size <= 0) {
                 this.particles.splice(i, 1)
+            }
+            if(this.particles[i].opacity <= 0) {
+                this.particles.splice(i, 1)
+            }
+            if(this.particles[i].shrink == 0 && this.particles[i].fadeOut == 0 && this.particles[i].frame > this.particles[i].destroyTime) {
+
             }
         }
 
@@ -143,11 +185,14 @@ class ParticleEffect {
         g.beginPath();
         g.arc(this.pos.x,this.pos.y,2,0,2*Math.PI,false);
         g.fill();
+
+        this.frame++;
     }
 
 }
 
-let particleEffect = new ParticleEffect(canvas.width/2, 700, {}, {shrink: 0.05})
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {}, {})
+
 
 function animate() {
     requestAnimationFrame(animate);
