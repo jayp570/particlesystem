@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Particle System Test</title>
+    <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        canvas {
+            border: 4px solid black;
+            margin: auto;
+        }
+        button {
+            padding: 20px;
+            padding-right: 50px;
+            padding-left: 50px;
+        }
+        audio {
+            display: none;
+        }
+        .slider {
+            width: 50%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas> <br><br>
+    <script src="index.js"></script> 
+    <button onclick="generateNewEffect()">Generate</button><br><br>
+    effectWidth <br>
+    0 <input type="range" min="0" max="360" value="60" class="slider" id="effectWidthSlider"> 360 <br> <br>
+
+    particleAmount <br>
+    1 <input type="range" min="1" max="100" value="5" class="slider" id="particleAmountSlider"> 100 <br><br>
+
+    continuous
+    <input type="checkbox" id="continuousCheckbox" checked> <br><br>
+</body>
+</html>
