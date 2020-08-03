@@ -13,47 +13,50 @@ function getRandomNum(min, max) {
 function getDefaultParticleParam() {
     return {
         speed: [5, 10], 
-        size: [5, 10],
-        effectRadius: 60,
+        size: [10, 20],
+        shapes: ["circle"],
+        effectWidth: 60,
         destroyTime: [10, 25],
         fadeOut: 0,
         shrink: 1,
         angle: 90,
-        colors: ["yellow", "red", "orange", "gray", "darkgray"]
-    }
-}
-
-function getDefaultParticleEffectParam() {
-    return {
-        particlesNum: 1,
+        colors: ["red", "orange", "gray"],
+        particlesNum: 4,
         continuous: true
     }
 }
 
-/*
-function getDefaultParticleParam() {
-    return {
-        speed: [5, 20], 
-        size: [5, 50],
-        effectRadius: 360,
-        destroyTime: [0, 0],
-        fadeOut: 0,
-        shrink: 4,
-        angle: 90,
-        colors: ["yellow", "red", "orange", "gray", "darkgray"]
-    }
-}
 
-function getDefaultParticleEffectParam() {
-    return {
-        particlesNum: 1000,
-        continuous: false
-    }
-}
-*/
+
+// function getDefaultParticleParam() {
+//     return {
+//         speed: [1, 20], 
+//         size: [1, 70],
+//         shapes: ["circle"],
+//         effectWidth: 360,
+//         destroyTime: [0, 0],
+//         fadeOut: 0,
+//         shrink: 6,
+//         angle: 90,
+//         colors: ["yellow", "darkorange", "orange", "gray", "darkgray"],
+//         particlesNum: 100,
+//         continuous: false
+//     }
+// }
+
+
 
 function convertToRadians(num) {
     return num*(Math.PI/180)
+}
+
+function fillTriangle(x, y, size) {
+    size*=2
+    g.beginPath()
+    g.moveTo(x, y)
+    g.lineTo(x+size, y)
+    g.lineTo(x+size/2, y-Math.sqrt(Math.pow(size, 2)-Math.pow(size/2, 2)))
+    g.fill()
 }
 
 class Particle {
@@ -66,6 +69,8 @@ class Particle {
         
         this.size = getRandomNum(params.size[0], params.size[1])
 
+        this.shape = params.shapes[Math.round(Math.random()*params.shapes.length)]
+
         this.destroyTime = getRandomNum(params.destroyTime[0], params.destroyTime[1])
         this.fadeOut = params.fadeOut
         this.shrink = params.shrink
@@ -74,8 +79,8 @@ class Particle {
 
         this.opacity = 1.0
         
-        let minAngle = params.angle-(params.effectRadius/2)
-        let maxAngle = params.angle+(params.effectRadius/2)
+        let minAngle = params.angle-(params.effectWidth/2)
+        let maxAngle = params.angle+(params.effectWidth/2)
         minAngle = convertToRadians(minAngle)
         maxAngle = convertToRadians(maxAngle)
         let angle = getRandomNum(minAngle, maxAngle)
@@ -116,9 +121,16 @@ class Particle {
         }
 
         g.fillStyle = this.color;
-        g.beginPath();
-        g.arc(this.pos.x,this.pos.y,this.size,0,2*Math.PI,false);
-        g.fill(); 
+
+        if(this.shape == "circle") {
+            g.beginPath();
+            g.arc(this.pos.x,this.pos.y,this.size,0,2*Math.PI,false);
+            g.fill();
+        } else if(this.shape == "square") {
+            g.fillRect(this.pos.x, this.pos.y, this.size*1.5, this.size*1.5)
+        } else if(this.shape == "triangle") {
+            fillTriangle(this.pos.x, this.pos.y, this.size)
+        }
 
         g.globalAlpha = 1.0
 
@@ -130,24 +142,20 @@ class Particle {
 
 class ParticleEffect {
 
-    constructor(x, y, particleEffectParams, particleParams) {
+    constructor(x, y, particleParams) {
 
         this.pos = {
             x: x,
             y: y
         }
 
-        this.particleEffectParams = getDefaultParticleEffectParam()
         this.particleParams = getDefaultParticleParam()
-        for(let element in particleEffectParams) {
-            this.particleEffectParams[element] = particleEffectParams[element]
-        }
         for(let element in particleParams) {
             this.particleParams[element] = particleParams[element]
         }
 
-        this.continuous = this.particleEffectParams.continuous
-        this.particlesNum = this.particleEffectParams.particlesNum
+        this.continuous = this.particleParams.continuous
+        this.particlesNum = this.particleParams.particlesNum
 
         this.particles = []
 
@@ -166,6 +174,8 @@ class ParticleEffect {
                 this.particles.push(new Particle(this.pos.x, this.pos.y, this.particleParams))
             }
         }
+
+        this.pos.x+=0
            
 
         for(let i = 0; i < this.particles.length; i++) {
@@ -191,7 +201,7 @@ class ParticleEffect {
 
 }
 
-let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {}, {})
+let particleEffect = new ParticleEffect(canvas.width/2, 650, {}, {})
 
 
 function animate() {
