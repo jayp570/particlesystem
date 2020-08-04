@@ -8,6 +8,7 @@ A simple Javascript customizable particle system useful for minimalist explosion
 - Call the `update()` function of your `ParticleEffect` object in every animation frame
 
 ## Sample Code
+#### index.html
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,7 @@ A simple Javascript customizable particle system useful for minimalist explosion
 </body>
 </html>
 ```
-
+#### index.js
 ```js
 let canvas = document.querySelector("canvas");
 
