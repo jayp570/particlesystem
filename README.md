@@ -155,3 +155,4 @@ let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
 |---|---|---|
 |`pos`|`JSON`, contains contains an `x` and `y` value|controls the position of where particles are generated on the canvas|
 |`vel`|`JSON`, contains contains an `x` and `y` value|controls the movement of the position of where particles are generated on the canvas|
+|`particles`|`list`, all elements in the list are of type `Particle`|contains a list of particles that are still present on screen|
