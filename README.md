@@ -64,7 +64,7 @@ animate();
 
 ## Particle Effect Customization
 Effect specifications are passed to the `ParticleEffect` instantiation through a JSON object
-|Parameter|Type|Description|Example|
+|Name|Type|Description|Example|
 |---------|----|-----------|-------|
 |`angle`|`number`, degree measurement|the overall angle at which the entire particle effect is pointing|`angle: 90`|
 |`colors`|`list`, contains `strings` - can be hex codes, rgb values, or color names|colors of particles, will be chosen randomly if there is more than one value in the list|`colors: ["yellow"]`\, `colors: ["springgreen", "rgb(78, 0, 5)", "#bafff7", "darkorange"]`|
@@ -149,3 +149,9 @@ let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
     effectVel: {x: 0, y: 0}
 }
 ```
+
+## ParticleEffect Variables and Methods
+|Name|Type|Description|
+|---|---|---|
+|`pos`|`JSON`, contains contains an `x` and `y` value|controls the position of where particles are generated on the canvas|
+|`vel`|`JSON`, contains contains an `x` and `y` value|controls the movement of the position of where particles are generated on the canvas|
