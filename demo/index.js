@@ -14,18 +14,32 @@ function getDefaultParticleParam() {
     return {
         speed: [5, 10], 
         size: [5, 20],
-        shapes: ["line", "circle", "square", "triangle"],
+        shapes: ["circle"],
         effectWidth: 60,
         destroyTime: [25, 25],
         fadeOut: 0,
         shrink: 1,
         angle: 90,
-        colors: ["yellow", "magenta", "cyan"],
+        colors: ["white"],
         particleAmount: 5,
         continuous: true,
         effectVel: {x: 0, y: 0}
     }
 }
+/*
+angle
+colors
+continuous
+destroyTime
+effectVel
+effectWidth
+fadeOut
+particleAmount
+shapes
+shrink
+size
+speed
+*/
 
 
 
@@ -210,21 +224,29 @@ class ParticleEffect {
                 this.particles.splice(i, 1)
             }
             if(this.particles[i].shrink == 0 && this.particles[i].fadeOut == 0 && this.particles[i].frame > this.particles[i].destroyTime) {
-
+                this.particles.splice(i, 1)
             }
         }
 
-        this.g.fillStyle = "red";
-        this.g.beginPath();
-        this.g.arc(this.pos.x,this.pos.y,2,0,2*Math.PI,false);
-        this.g.fill();
+        // this.g.fillStyle = "red";
+        // this.g.beginPath();
+        // this.g.arc(this.pos.x,this.pos.y,2,0,2*Math.PI,false);
+        // this.g.fill();
 
         this.frame++;
     }
 
 }
 
-let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {}, g)
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
+    colors: ["yellow", "cyan", "magenta"],
+    shapes: ["line"],
+    continuous: false,
+    effectWidth: 360,
+    particleAmount: 500,
+    speed: [5, 20],
+    destroyTime: [0, 0]
+}, g)
 
 function generateNewEffect() {
     particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {

@@ -5,7 +5,7 @@ canvas.height = 700;
 
 let g = canvas.getContext("2d");
 
-let particleEffect = new ParticleEffect(600, 600, {}, g)
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {}, g)
 
 function animate() {
     requestAnimationFrame(animate);

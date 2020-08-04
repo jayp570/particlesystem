@@ -202,7 +202,7 @@ class ParticleEffect {
                 this.particles.splice(i, 1)
             }
             if(this.particles[i].shrink == 0 && this.particles[i].fadeOut == 0 && this.particles[i].frame > this.particles[i].destroyTime) {
-
+                this.particles.splice(i, 1)
             }
         }
 
