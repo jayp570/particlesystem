@@ -2,10 +2,9 @@
 A simple Javascript customizable particle system useful for minimalist explosions, smoke effects, fireworks, and more.
 
 ## How to Use
-- Install `particle.js`
-- Link `particle.js` to an HTML file with a `<canvas>` element
-- Create a `ParticleEffect` object in a separate JS file or in a `<script>` tag
-- Call the `update()` function of your `ParticleEffect` object in every animation frame
+* Include `particle.js` in your HTML
+* Create a `ParticleEffect`
+* Call the `.update()` method of your `ParticleEffect` in your animation loop
 
 ## Sample Code
 #### index.html
@@ -56,13 +55,10 @@ animate();
 |---------|-----------|
 |`x`      |x position of the particle effect|
 |`y`      |y position of the particle effect|
-|`particleParams`|customization of the particle effect (can be left as `{}` for default particles)|
+|`particleParams`|options for further customization
 |`ctx`|canvas context object|
 
-### Code 
-`let particleEffect = new ParticleEffect(x, y, particleParams, ctx)`
-
-## Particle Effect Customization
+## Customization
 Effect specifications are passed to the `ParticleEffect` instantiation through a JSON object
 |Name|Type|Description|Example|
 |---------|----|-----------|-------|
