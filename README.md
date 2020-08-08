@@ -32,7 +32,7 @@ canvas.height = 700;
 
 let g = canvas.getContext("2d");
 
-let particleEffect = new ParticleEffect(600, 600, {}, g)
+let particleEffect = new ParticleEffect(600, 600, g, {})
 
 function animate() {
     requestAnimationFrame(animate);
@@ -78,7 +78,7 @@ Effect specifications are passed to the `ParticleEffect` instantiation through a
 ### Using Customization
 #### Sample Code
 ```js
-let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, g, {
     colors: ["yellow", "cyan", "magenta"],
     shapes: ["line"],
     continuous: false,
@@ -86,7 +86,7 @@ let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
     particleAmount: 500,
     speed: [5, 20],
     destroyTime: [0, 0]
-}, g)
+})
 ```
 
 #### Output
@@ -94,7 +94,7 @@ let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
 ---
 #### Sample Code
 ```js
-let particleEffect = new ParticleEffect(10, 600, {
+let particleEffect = new ParticleEffect(10, 600, g, {
     effectVel: {x: 11, y: 0},
     effectWidth: 60,
     colors: ["yellowgreen"],
@@ -104,7 +104,7 @@ let particleEffect = new ParticleEffect(10, 600, {
     speed: [5, 8],
     particleAmount: 5,
     destroyTime: [0, 5]
-}, g)
+})
 ```
 
 #### Output
@@ -112,7 +112,7 @@ let particleEffect = new ParticleEffect(10, 600, {
 ---
 #### Sample Code
 ```js
-let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
+let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, g, {
     continuous: false,
     effectWidth: 360,
     particleAmount: 400,
@@ -122,7 +122,7 @@ let particleEffect = new ParticleEffect(canvas.width/2, canvas.height/2, {
     destroyTime: [0, 0],
     shrink: 4,
     shapes: ["square"]
-}, g)
+})
 ```
 
 #### Output
