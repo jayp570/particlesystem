@@ -150,7 +150,7 @@ class Particle {
 
 class ParticleEffect {
 
-    constructor(x, y, particleParams, ctx) {
+    constructor(x, y, ctx, particleParams) {
 
         this.g = ctx
 
@@ -159,11 +159,10 @@ class ParticleEffect {
             y: y
         }
 
-        this.particleParams = getDefaultParticleParam()
-        for(let element in particleParams) {
-            this.particleParams[element] = particleParams[element]
-        }
-
+        this.particleParams = getDefaultParticleParam();
+        if(particleParams !== undefined)
+            this.particleParams = particleParams;
+        
         this.vel = {
             x: this.particleParams.effectVel.x,
             y: this.particleParams.effectVel.y
